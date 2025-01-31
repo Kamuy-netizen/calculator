@@ -1,28 +1,21 @@
-let input = document.getElementById("inputBox");
-let buttons = document.querySelectorAll("button");
+const inputBox = document.getElementById('inputBox');
+const buttons = document.querySelectorAll('.button');
+const equalsButton = document.querySelector('.samadengan');
 
-let string = "";
-let arr = Array.from(buttons);
-arr.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    if (e.target.innerHTML == "=") {
-      string = eval(string);
-      input.value = string;
-    } else if (e.target.innerHTML == "AC") {
-      string = "";
-      input.value = string;
-    } else if (e.target.innerHTML == "DEL") {
-      string = string.substring(0, string.length - 1);
-      input.value = string;
-    } else if (e.target.innerHTML == "÷") {
-      string = string + "/";
-      input.value = string;
-    } else if (e.target.innerHTML == "x") {
-      string = string + "*";
-      input.value = string;
-    } else {
-      string = string + e.target.innerHTML;
-      input.value = string;
-    }
-  });
+buttons.forEach(button => button.addEventListener('click', () => {
+  const buttonText = button.textContent;
+  if (buttonText === 'AC') inputBox.value = '';
+  else if (buttonText === 'DEL') inputBox.value = inputBox.value.slice(0, -1);
+  else if (buttonText === '%') inputBox.value = (parseFloat(inputBox.value) / 100).toString();
+  else if (['+', '-', 'x', '&div;'].includes(buttonText)) {
+    inputBox.value += ` ${buttonText === 'x' ? '*' : buttonText === '&div;' ? '/' : buttonText} `;
+  } else inputBox.value += buttonText;
+}));
+
+equalsButton.addEventListener('click', () => {
+  try {
+    inputBox.value = eval(inputBox.value.replace('x', '*').replace('&div;', '/'));
+  } catch {
+    inputBox.value = 'Error';
+  }
 });
